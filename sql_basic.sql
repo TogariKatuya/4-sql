@@ -70,23 +70,22 @@
     SELECT * 
     from countries 
     WHERE indep_year <= 1900 
-    and population >= 100000;
+    or population >= 100000;
 
 -- 問13
 -- コードがDZAもしくはALBかつ独立記念日が1990年より前の国を全て抽出してください。
     SELECT * 
     from countries 
-    WHERE code in('DZA','ALB') or indep_year <= 1990;
+    WHERE code in('DZA','ALB') and indep_year <= 1990;
 
 -- 問14
 -- 全ての地方をグループ化せずに表示してください。
-    SELECT region 
-    from countries;
+    SELECT DISTINCT region from countries;
 
 -- 問15
 -- 国名と人口を以下のように表示させてください。シングルクォートに注意してください。
 -- 「Arubaの人口は103000人です」
-    SELECT CONCAT(name,'の人口は/',population,'/人です。')
+    SELECT CONCAT(name,'の人口は',population,'人です。')
     from countries;
 
 -- 問16
@@ -107,11 +106,11 @@
 -- 平均寿命が長い順、独立記念日が新しい順に国を表示させてください。
     SELECT name,life_expectancy,indep_year
     from countries 
-    order by life_expectancy desc,indep_year asc;
+    order by life_expectancy desc,indep_year desc;
 
 -- 問19
 -- 全ての国の国コードの一文字目と国名を表示させてください。
-    SELECT SUBSTRING(code from 1 for 1,)name 
+    SELECT SUBSTRING(code from 1 for 1),name 
     from countries;
 
 -- 問20
@@ -153,7 +152,7 @@
 
 -- 問26
 -- 全ての国と言語と市区町村を表示してください。
-    SELECT countries.name,language,district 
+    SELECT countries.name,language,cities.name
     from countries 
     inner join countrylanguages 
     on countries.code = countrylanguages.country_code
@@ -199,7 +198,7 @@
             where celebrities.country_code = countries.code )>= 50
     and  (SELECT min(celebrities.age) 
             from celebrities 
-            where celebrities.country_code = countries.code )>= 30;
+            where celebrities.country_code = countries.code )<= 30;
 -- 問31
 -- 1991年生まれと、1981年生まれの有名人が何人いるか調べてください。ただし、日付関数は使用せず、UNION句を使用してください。
     SELECT count(id)
